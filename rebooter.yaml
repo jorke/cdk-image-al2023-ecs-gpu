@@ -1,0 +1,19 @@
+name: Rebooter
+schemaVersion: 1.0
+phases:
+  - name: build
+    steps:
+      - name: RestartTrigger
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              REBOOT_INDICATOR=/var/tmp/reboot-indicator
+              if [ -f "${REBOOT_INDICATOR}" ]; then
+                echo 'The reboot file exists. Deleting it and exiting with success.'
+                rm "${REBOOT_INDICATOR}"
+                exit 0
+              fi
+              echo 'The reboot file does not exist. Creating it and triggering a restart.'
+              touch "${REBOOT_INDICATOR}"
+              exit 194

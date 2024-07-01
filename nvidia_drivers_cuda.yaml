@@ -1,0 +1,22 @@
+name: InstallDocument
+description: Install the cuda drivers
+schemaVersion: 1.0
+
+phases:
+  - name: build
+    steps:
+      - name: install_kernel_headers_plus_repo
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r) kernel-modules-extra-$(uname -r) -y
+              dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/amzn2023/x86_64/cuda-amzn2023.repo -y
+              dnf clean expire-cache -y
+      - name: install_nvidia_drivers_toolkit
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              dnf module install nvidia-driver:latest-dkms -y
+              dnf install cuda-toolkit -y

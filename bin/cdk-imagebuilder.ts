@@ -1,21 +1,19 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { CdkImagebuilderStack } from '../lib/cdk-imagebuilder-stack';
+import { ImagebuilderStack } from '../lib/imagebuilder-stack';
 
-const app = new cdk.App();
-new CdkImagebuilderStack(app, 'CdkImagebuilderStack', {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
-
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
-
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
-
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+const app = new cdk.App({
+  context: {
+    info: {
+      name: 'al2023-ecs-optimized-gpu',
+    }
+  }
+});
+new ImagebuilderStack(app, 'ImageBuilderStack', {
+  tags: {
+    'environment:type':'builder',
+    'service:name':'build-image',
+  },
+  env: { region: 'ap-southeast-2' },
 });
